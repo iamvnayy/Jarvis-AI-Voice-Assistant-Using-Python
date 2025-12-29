@@ -2,7 +2,6 @@ from openai import OpenAI
 client = OpenAI(
   api_key="<Your Key Here>",
 )
-
 completion = client.chat.completions.create(
   model="gpt-3.5-turbo",
   messages=[
@@ -10,6 +9,5 @@ completion = client.chat.completions.create(
     {"role": "user", "content": "what is coding"}
   ]
 )
-
-
 print(completion.choices[0].message.content)
+
