@@ -7,22 +7,26 @@ from openai import OpenAI
 from gtts import gTTS
 import pygame
 import os
+
 recognizer = sr.Recognizer()
 engine = pyttsx3.init() 
+pygame.mixer.init()
 newsapi = "<Your Key Here>"
+
 def speak_old(text):
     engine.say(text)
     engine.runAndWait()
+
 def speak(text):
     tts = gTTS(text)
     tts.save('temp.mp3') 
-    pygame.mixer.init()
     pygame.mixer.music.load('temp.mp3')
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
+        pygame.time.wait(10000)
     pygame.mixer.music.unload()
     os.remove("temp.mp3") 
+
 def aiProcess(command):
     client = OpenAI(api_key="<Your Key Here>",
     )
@@ -34,6 +38,7 @@ def aiProcess(command):
     ]
     )
     return completion.choices[0].message.content
+    
 def processCommand(c):
     if "open google" in c.lower():
         webbrowser.open("https://google.com")
@@ -57,10 +62,10 @@ def processCommand(c):
     else:
         output = aiProcess(c)
         speak(output) 
+        
 if __name__ == "__main__":
     speak("Initializing Jarvis....")
     while True:
-        print("recognizing...")
         try:
             with sr.Microphone() as source:
                 print("Listening...")
@@ -75,4 +80,5 @@ if __name__ == "__main__":
                     processCommand(command)
         except Exception as e:
             print(e)
+
 
